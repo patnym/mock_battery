@@ -1,15 +1,11 @@
 obj-m += mockbattery.o
 
 #This defaults your own kernel, change this to if not building towards the building systems kernel
-ifeq ($(KSRC),) 
-KSRC := /lib/modules/$(shell uname -r)/build/
-endif
+KSRC ?= /lib/modules/$(shell uname -r)/build/
 
-ifeq ($(CC),) 
-CC := gcc
-endif
+CROSS_COMPILE ?=
 
 all:
-	make $(CC) -C $(KSRC) M=$(PWD) modules
+	make CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(PWD) modules
 clean: 
-	make $(CC) -C $(KSCR) M=$(PWD) clean
+	make -C $(KSRC) M=$(PWD) clean
